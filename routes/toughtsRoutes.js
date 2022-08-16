@@ -10,6 +10,8 @@ router.get('/dashboard', checkAuth, ToughtController.showDashboard)
 router.get('/add', checkAuth, ToughtController.createTought)
 router.post('/add', checkAuth, ToughtController.createToughtSave)
 router.post('/remove', checkAuth, ToughtController.removeTought)
+router.get('/edit/:id', checkAuth, ToughtController.updateTought)
+router.post('/edit', checkAuth, ToughtController.updateToughtSave)
 
 
 

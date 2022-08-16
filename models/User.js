@@ -12,7 +12,7 @@ const User = db.define('User', {
         type: DataTypes.STRING,
         require: true
     },
-    passoword: {
+    password: {
         type: DataTypes.STRING,
         require: true
     }

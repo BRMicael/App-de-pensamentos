@@ -21,5 +21,5 @@ Além disso, permite buscar por pensamentos utilizando o filtro de busca e reali
 
 ```bash
 • Crie um banco de dados com as informações do arquivo conn da pasta db
-• npm start
+• Execute no terminal npm start
 ```

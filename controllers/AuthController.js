@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const UserGoogle = require('../models/UserGoogle');
 
 const bcrypt = require('bcryptjs');
 
@@ -9,6 +10,10 @@ module.exports = class AuthController {
 
     static register(req, res) {
         res.render ('auth/register')
+    }
+
+    static privacy(req, res) {
+        res.render ('auth/privacy')
     }
 
     static async registerPost(req, res) {
@@ -94,6 +99,72 @@ module.exports = class AuthController {
             res.redirect('/')
         })
 
+    }
+
+    static async loginGooglePost(req, res) {
+
+            const {googleToken, googleEmail, googleName} = req.body
+
+            const checkIfUserhasEmailRegistered = await User.findOne({where: {email: googleEmail}});
+            const checkIfUserhasTokenRegistered = await User.findOne({where: {tokenGoogleUser: googleToken}});
+
+            
+
+            if(checkIfUserhasTokenRegistered) {
+                req.session.userid = checkIfUserhasTokenRegistered.id
+
+                req.flash('message', 'Usuário logado com o Google!')
+
+                req.session.save(() => {
+                    res.redirect('/')
+                })
+
+            }else if(!checkIfUserhasEmailRegistered){
+                const user = {
+                    name: googleName,
+                    email: googleEmail,
+                    tokenGoogleUser: googleToken
+                }
+    
+                try {
+                    const createdUser = await UserGoogle.create(user)
+    
+                    req.session.userid = createdUser.id
+                
+                    req.flash('message', 'Cadastro com Google realizado com sucesso!')
+                
+                    req.session.save(() => {
+                        res.redirect('/')
+                    })
+                
+                } catch(err) {
+                    console.log(err)
+                }            
+            }else {
+                const user = {
+                    email: googleEmail,
+                    tokenGoogleUser: googleToken
+                }
+
+                try {
+                    const updatedUser = await UserGoogle.update({ tokenGoogleUser: user.tokenGoogleUser }, {
+                        where: {
+                            email: user.email
+                        }
+                      });
+    
+                    req.session.userid = updatedUser.id
+                
+                    req.flash('message', 'Email cadastrado sem o token do Google, agora possui o token!')
+                
+                    req.session.save(() => {
+                        res.redirect('/')
+                    })
+                
+                } catch(err) {
+                    console.log(err)
+                }
+            }
     }
 
 }

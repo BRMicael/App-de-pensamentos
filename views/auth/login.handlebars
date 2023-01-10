@@ -1,7 +1,6 @@
 <div class="auth-container">
     <h2>Entrar</h2>
-    <form action="/login" method="post">
-        
+    <form action="/login" method="post">  
         <div class="form-control">
             <label for="email">Email:</label>
             <input type="email" name="email" required>
@@ -16,4 +15,52 @@
         <p>Não tem conta? <a href="/register">Registre-se</a></p>
 
     </form>
+
+    <form action="/loginGoogle" id="loginGoogle" method="post" hidden>
+        <input type="text" value="" name="googleToken" hidden id="googleToken">
+        <input type="text" value="" name="googleEmail" hidden id="googleEmail">
+        <input type="text" value="" name="googleName" hidden id="googleName">
+        <input type="submit" value="Logar" hidden id="googleSubmit">
+    </form>
+    
+    <div id="g_id_onload"
+        data-client_id="743771323729-nlovmkql5ca5aqh74fpf8n6go76v6oif.apps.googleusercontent.com"
+        data-context="signin"
+        data-ux_mode="popup"
+        data-login_uri="http://localhost:3000/login"
+        data-callback="gravar"
+        data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+        data-type="standard"
+        data-shape="rectangular"
+        data-theme="outline"
+        data-text="signin_with"
+        data-size="large"
+        data-locale="pt-BR"
+        data-logo_alignment="left">
+    </div>
+
+    <script>
+        function gravar(response){
+
+           
+            const data = jwt_decode(response.credential)
+            console.log(data)
+
+            const {name, email, sub} = data;
+
+            $('#googleToken').attr('value', sub)
+            $('#googleEmail').attr('value', email)
+            $('#googleName').attr('value', name) 
+
+            $('#googleSubmit').click()
+
+            fullName.textContent = name
+
+        }
+
+    </script>
 </div>
+

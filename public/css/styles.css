@@ -67,6 +67,7 @@
 footer {
     height: 150px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border-top: 1px solid #f6982d;
@@ -75,6 +76,10 @@ footer {
 
 footer span {
     font-weight: bold;
+}
+
+footer a {
+    text-decoration: none;
 }
 
 /* login e register */
